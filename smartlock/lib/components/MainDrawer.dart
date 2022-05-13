@@ -18,7 +18,7 @@ class MainDrawer extends StatelessWidget {
             leading: Icon(Icons.edit),
             title: Text('Adicionar Laboratório'),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed(
+              Navigator.of(context).pushNamed(
                 AppRoutes.LabAdd,
               );
             },

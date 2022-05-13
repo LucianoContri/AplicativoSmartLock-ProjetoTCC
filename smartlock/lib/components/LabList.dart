@@ -19,6 +19,21 @@ class LabList with ChangeNotifier {
     return _items.length;
   }
 
+  Future<void> AddLab(Laboratorio laboratorio) async {
+    final response = await http.post(
+      Uri.parse(_url),
+      body: jsonEncode(
+        {
+          "Nome": laboratorio.Nome,
+          "Descricao": laboratorio.Descricao,
+          "Campus": laboratorio.Campus,
+          "UrlImagem": laboratorio.UrlImagem,
+          "chaveNFC": laboratorio.chaveNFC,
+        },
+      ),
+    );
+  }
+
   Future<void> loadProducts() async {
     final response = await http.get(Uri.parse(_url));
     print(jsonDecode(response.body));
@@ -36,12 +51,5 @@ class LabList with ChangeNotifier {
       );
     });
     notifyListeners();
-    // Laboratorio(
-    //   id: productId,
-    //   Nome: productData['Nome'],
-    //   Campus: productData['Campus'],
-    //   Descricao: productData['Descricao'],
-    //   UrlImagem: productData['UrlImagem'],
-    //   chaveNFC: productData['chaveNFC'],
   }
 }
