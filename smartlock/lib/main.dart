@@ -4,6 +4,7 @@ import 'package:smartlock/models/Auth.dart';
 import 'package:smartlock/pages/AuthOrHome.dart';
 import 'package:smartlock/pages/AuthScreen.dart';
 import 'package:smartlock/pages/HomePage.dart';
+import 'package:smartlock/pages/LabAddPage.dart';
 import 'package:smartlock/pages/LabOpenPage.dart';
 import 'utils/app_routes.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +31,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
           routes: {
             AppRoutes.AuthOrHome: (ctx) => AuthOrHome(),
-            AppRoutes.LabOpen: (ctx) => LabOpenPage()
+            AppRoutes.LabOpen: (ctx) => LabOpenPage(),
+            AppRoutes.LabAdd: (ctx) => LabAddPage()
           },
           theme: Tema.copyWith(
               colorScheme: Tema.colorScheme.copyWith(

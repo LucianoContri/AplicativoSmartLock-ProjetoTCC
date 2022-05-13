@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:smartlock/components/MainDrawer.dart';
 
 import '../components/LabList.dart';
 import '../components/LabGrid.dart';
@@ -23,16 +24,13 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.menu),
-        ),
         title: const Text(
           'Laboratórios',
           style: TextStyle(color: Colors.grey),
         ),
         actions: [IconButton(onPressed: () {}, icon: Icon(Icons.logout))],
       ),
+      drawer: MainDrawer(),
       body: Column(
         children: [LabGrid()],
       ),
