@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../components/LabList.dart';
+import '../components/LabGrid.dart';
 import '../data/dadosdeteste.dart';
 
 class HomePage extends StatelessWidget {
@@ -9,8 +11,19 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.menu),
+        ),
+        title: const Text(
+          'Laboratórios',
+          style: TextStyle(color: Colors.grey),
+        ),
+        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.logout))],
+      ),
       body: Column(
-        children: [LabList(LaboratoriosIESB)],
+        children: [LabGrid()],
       ),
     );
   }

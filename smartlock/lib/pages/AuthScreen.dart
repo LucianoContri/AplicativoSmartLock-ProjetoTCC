@@ -9,7 +9,10 @@ class AuthScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 239, 239, 239),
       appBar: AppBar(
-        title: const Text('Smart Lock'),
+        title: const Text(
+          'Smart Lock',
+          style: TextStyle(color: Colors.grey),
+        ),
       ),
       body: Column(
         children: [

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:smartlock/components/LabList.dart';
 import 'package:smartlock/models/Auth.dart';
 import 'package:smartlock/pages/AuthOrHome.dart';
 import 'package:smartlock/pages/AuthScreen.dart';
 import 'package:smartlock/pages/HomePage.dart';
+import 'package:smartlock/pages/LabOpenPage.dart';
 import 'utils/app_routes.dart';
 import 'package:provider/provider.dart';
 
@@ -21,10 +23,14 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => Auth(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => LabList(),
+        ),
       ],
       child: MaterialApp(
           routes: {
             AppRoutes.AuthOrHome: (ctx) => AuthOrHome(),
+            AppRoutes.LabOpen: (ctx) => LabOpenPage()
           },
           theme: Tema.copyWith(
               colorScheme: Tema.colorScheme.copyWith(

@@ -1,85 +1,44 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import 'package:http/http.dart';
 import 'package:smartlock/models/Labs.dart';
 
-class LabList extends StatelessWidget {
-  final List<Laboratorio> Laboratorios;
+class LabList with ChangeNotifier {
+  final _url =
+      'https://smartlocktcc-default-rtdb.firebaseio.com/Laborat%C3%B3rios.json';
+  List<Laboratorio> _items = [];
 
-  LabList(this.Laboratorios);
+  List<Laboratorio> get items => [..._items];
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 800,
-      child: Laboratorios.isEmpty
-          ? Column(
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'Nenhum Laboratório disponível!',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  height: 200,
-                  child: Image.asset(
-                    'assets/images/RcGRy7K7i.png',
-                    fit: BoxFit.cover,
-                  ),
-                )
-              ],
-            )
-          : ListView.builder(
-              itemCount: Laboratorios.length,
-              itemBuilder: (ctx, index) {
-                final tr = Laboratorios[index];
-                return Card(
-                  elevation: 8,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
-                  margin: const EdgeInsets.all(20),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(20),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.network(
-                              tr.UrlImagem,
-                              width: 200,
-                              height: 200,
-                              fit: BoxFit.fitWidth,
-                            ),
-                          ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            FittedBox(
-                              child: Text(
-                                tr.Nome,
-                                style: Theme.of(context).textTheme.headline6,
-                              ),
-                            ),
-                            FittedBox(
-                              child: Text(
-                                tr.Descricao,
-                                style: const TextStyle(
-                                    color: Color.fromARGB(255, 94, 94, 94)),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ]),
-                );
-              },
-            ),
-    );
+  int get itemsCount {
+    return _items.length;
+  }
+
+  Future<void> loadProducts() async {
+    final response = await http.get(Uri.parse(_url));
+    print(response.body);
+    if (response.body == 'null') {
+      print('TA NULO');
+      return;
+    }
+    print('Não TA NULO');
+    Map<String, dynamic> data = jsonDecode(response.body);
+    data.forEach((productId, productData) {
+      _items.add(
+        Laboratorio(
+          id: productId,
+          Nome: productData['Nome'],
+          Campus: productData['Campus'],
+          Descricao: productData['Descricao'],
+          UrlImagem: productData['UrlImagem'],
+          chaveNFC: productData['chaveNFC'],
+        ),
+      );
+    });
+    notifyListeners();
   }
 }
