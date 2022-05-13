@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,25 +21,27 @@ class LabList with ChangeNotifier {
 
   Future<void> loadProducts() async {
     final response = await http.get(Uri.parse(_url));
-    print(response.body);
-    if (response.body == 'null') {
-      print('TA NULO');
-      return;
-    }
-    print('Não TA NULO');
+    print(jsonDecode(response.body));
     Map<String, dynamic> data = jsonDecode(response.body);
-    data.forEach((productId, productData) {
+    data.forEach((labid, labdata) {
       _items.add(
         Laboratorio(
-          id: productId,
-          Nome: productData['Nome'],
-          Campus: productData['Campus'],
-          Descricao: productData['Descricao'],
-          UrlImagem: productData['UrlImagem'],
-          chaveNFC: productData['chaveNFC'],
+          id: labid,
+          Nome: labdata['Nome'],
+          Campus: labdata['Campus'],
+          Descricao: labdata['Descricao'],
+          UrlImagem: labdata['UrlImagem'],
+          chaveNFC: labdata['chaveNFC'],
         ),
       );
     });
     notifyListeners();
+    // Laboratorio(
+    //   id: productId,
+    //   Nome: productData['Nome'],
+    //   Campus: productData['Campus'],
+    //   Descricao: productData['Descricao'],
+    //   UrlImagem: productData['UrlImagem'],
+    //   chaveNFC: productData['chaveNFC'],
   }
 }

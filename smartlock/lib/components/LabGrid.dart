@@ -5,24 +5,29 @@ import 'package:smartlock/models/Labs.dart';
 import 'package:smartlock/components/LabItem.dart';
 import 'package:smartlock/components/LabList.dart';
 
+import '../data/dadosdeteste.dart';
+
 class LabGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print('entrou');
     final provider = Provider.of<LabList>(context);
+    print('saiu');
     final List<Laboratorio> loadedProducts = provider.items;
+    print(loadedProducts);
     return Container(
         height: 800,
         child: loadedProducts.isEmpty
             ? Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Text(
                     'Nenhum Laboratório disponível!',
                     style: Theme.of(context).textTheme.headline6,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
