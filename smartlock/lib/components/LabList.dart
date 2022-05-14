@@ -32,9 +32,11 @@ class LabList with ChangeNotifier {
         },
       ),
     );
+    notifyListeners();
   }
 
   Future<void> loadProducts() async {
+    _items.clear();
     final response = await http.get(Uri.parse(_url));
     print(jsonDecode(response.body));
     Map<String, dynamic> data = jsonDecode(response.body);

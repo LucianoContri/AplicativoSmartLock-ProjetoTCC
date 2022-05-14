@@ -14,16 +14,18 @@ class AuthScreen extends StatelessWidget {
           style: TextStyle(color: Colors.grey),
         ),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: Container(
-              child: Image.asset('assets/images/icon2.png'),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Container(
+                child: Image.asset('assets/images/icon2.png'),
+              ),
             ),
-          ),
-          AuthForm(),
-        ],
+            AuthForm(),
+          ],
+        ),
       ),
     );
   }

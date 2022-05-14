@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +19,17 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
-    Provider.of<LabList>(context, listen: false).loadProducts();
+    Provider.of<LabList>(
+      context,
+      listen: false,
+    ).loadProducts();
+  }
+
+  Future<void> _refreshProducts(BuildContext context) {
+    return Provider.of<LabList>(
+      context,
+      listen: false,
+    ).loadProducts();
   }
 
   @override
@@ -31,8 +43,14 @@ class _HomePageState extends State<HomePage> {
         actions: [IconButton(onPressed: () {}, icon: Icon(Icons.logout))],
       ),
       drawer: MainDrawer(),
-      body: Column(
-        children: [LabGrid()],
+      body: RefreshIndicator(
+        onRefresh: () => _refreshProducts(context),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [LabGrid()],
+          ),
+        ),
       ),
     );
   }
