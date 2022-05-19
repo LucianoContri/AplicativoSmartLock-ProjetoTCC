@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:smartlock/models/Labs.dart';
 
+import '../utils/app_routes.dart';
+
 class LabOpenPage extends StatelessWidget {
   const LabOpenPage({Key? key}) : super(key: key);
 
@@ -48,7 +50,9 @@ class LabOpenPage extends StatelessWidget {
             ),
             SizedBox(height: 60),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed(AppRoutes.NfcOpen);
+              },
               child: Text('Abrir'),
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(100, 100),

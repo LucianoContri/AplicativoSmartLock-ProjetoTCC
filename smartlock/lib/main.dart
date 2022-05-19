@@ -6,6 +6,7 @@ import 'package:smartlock/pages/AuthScreen.dart';
 import 'package:smartlock/pages/HomePage.dart';
 import 'package:smartlock/pages/LabAddPage.dart';
 import 'package:smartlock/pages/LabOpenPage.dart';
+import 'package:smartlock/pages/NfcOpenPage.dart';
 import 'utils/app_routes.dart';
 import 'package:provider/provider.dart';
 
@@ -24,15 +25,21 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => Auth(),
         ),
-        ChangeNotifierProvider(
-          create: (_) => LabList(),
-        ),
+        ChangeNotifierProxyProvider<Auth, LabList>(
+            create: (_) => LabList('', []),
+            update: (ctx, auth, previous) {
+              return LabList(
+                auth.token ?? '',
+                previous?.items ?? [],
+              );
+            }),
       ],
       child: MaterialApp(
           routes: {
             AppRoutes.AuthOrHome: (ctx) => AuthOrHome(),
             AppRoutes.LabOpen: (ctx) => LabOpenPage(),
-            AppRoutes.LabAdd: (ctx) => LabAddPage()
+            AppRoutes.NfcOpen: (ctx) => NfcOpenPage(),
+            AppRoutes.LabAdd: (ctx) => LabAddPage(),
           },
           theme: Tema.copyWith(
               colorScheme: Tema.colorScheme.copyWith(
