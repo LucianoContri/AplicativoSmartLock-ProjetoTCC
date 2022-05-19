@@ -5,6 +5,7 @@ import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 import 'package:ndef/ndef.dart' as ndef;
 
 import 'package:http/http.dart';
+import 'package:smartlock/models/Labs.dart';
 
 class NfcOpenPage extends StatefulWidget {
   const NfcOpenPage({Key? key}) : super(key: key);
@@ -18,42 +19,58 @@ class _NfcOpenPageState extends State<NfcOpenPage> {
   bool _started = false;
   @override
   Widget build(BuildContext context) {
+    final Laboratorio laboratorio =
+        ModalRoute.of(context)!.settings.arguments as Laboratorio;
     return Scaffold(
-      body: Container(
-        child: ElevatedButton(
-          onPressed: () async {
-            var availability = await FlutterNfcKit.nfcAvailability;
-            if (availability != NFCAvailability.available) {
-              // oh-no
-              print('NFCOFF');
-            }
-
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    var availability = await FlutterNfcKit.nfcAvailability;
+                    if (availability != NFCAvailability.available) {
+                      // oh-no
+                      print('NFCOFF');
+                    }
 // timeout only works on Android, while the latter two messages are only for iOS
-            var tag = await FlutterNfcKit.poll(
-                timeout: Duration(seconds: 10),
-                iosMultipleTagMessage: "Multiple tags found!",
-                iosAlertMessage: "Scan your tag");
-
-            print(jsonEncode(tag));
+                    var tag = await FlutterNfcKit.poll(
+                        timeout: Duration(seconds: 10),
+                        iosMultipleTagMessage: "Multiple tags found!",
+                        iosAlertMessage: "Scan your tag");
+                    if (laboratorio.chaveNFC == tag.id) {
+                      print('Registrado');
+                    } else {
+                      print("tag errada");
+                    }
+                    print(jsonEncode(tag));
 
 // write NDEF records if applicable
-            // if (tag.ndefWritable!) {
-            //   // decoded NDEF records
-            // await FlutterNfcKit.writeNDEFRecords([
-            //   ndef.TextRecord(text: 'opa'),
-            // ]);
-            // raw NDEF records
-            // await FlutterNfcKit.writeNDEFRawRecords([
-            //   new NDEFRawRecord(
-            //       "00", "0001", "0002", ndef.TypeNameFormat.unknown)
-            // ]);
-          },
-          child: Text('Abrir'),
-          style: ElevatedButton.styleFrom(
-            fixedSize: const Size(100, 100),
-            shape: const CircleBorder(),
+                    // if (tag.ndefWritable!) {
+                    //   // decoded NDEF records
+                    // await FlutterNfcKit.writeNDEFRecords([
+                    //   ndef.TextRecord(text: 'opa'),
+                    // ]);
+                    // raw NDEF records
+                    // await FlutterNfcKit.writeNDEFRawRecords([
+                    //   new NDEFRawRecord(
+                    //       "00", "0001", "0002", ndef.TypeNameFormat.unknown)
+                    // ]);
+                  },
+                  child: Text('Abrir'),
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(200, 200),
+                    shape: const CircleBorder(),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ),
+        ],
       ),
     );
   }
