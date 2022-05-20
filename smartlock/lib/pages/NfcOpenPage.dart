@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 import 'package:ndef/ndef.dart' as ndef;
-
+import 'package:mqtt_client/mqtt_client.dart';
 import 'package:http/http.dart';
+import 'package:provider/provider.dart';
+import 'package:smartlock/components/mqttservice.dart';
 import 'package:smartlock/models/Labs.dart';
 
 class NfcOpenPage extends StatefulWidget {
@@ -15,8 +17,6 @@ class NfcOpenPage extends StatefulWidget {
 }
 
 class _NfcOpenPageState extends State<NfcOpenPage> {
-  String _platformVersion = 'Unknown';
-  bool _started = false;
   @override
   Widget build(BuildContext context) {
     final Laboratorio laboratorio =
@@ -43,7 +43,9 @@ class _NfcOpenPageState extends State<NfcOpenPage> {
                         iosMultipleTagMessage: "Multiple tags found!",
                         iosAlertMessage: "Scan your tag");
                     if (laboratorio.chaveNFC == tag.id) {
-                      print('Registrado');
+                      print("tag correta");
+                      Provider.of<mqttservice>(context, listen: false)
+                          .connect();
                     } else {
                       print("tag errada");
                     }

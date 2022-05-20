@@ -3,29 +3,32 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
 class mqttservice with ChangeNotifier {
-  void connect() async {
+  Future<MqttServerClient> connect() async {
     MqttServerClient client =
         MqttServerClient.withPort('broker.emqx.io', 'flutter_client', 1883);
-
+    print('entrou');
     final connMessage = MqttConnectMessage()
-        .authenticateAs('username', 'password')
         .withWillTopic('willtopic')
         .withWillMessage('Will message')
         .startClean()
-        .withWillQos(MqttQos.atLeastOnce);
-
+        .withWillQos(MqttQos.atLeastOnce)
+        .withClientIdentifier('flutter_client');
+    print('saiu conmessage');
     client.connectionMessage = connMessage;
     try {
       await client.connect();
+      print('conectou');
     } catch (e) {
       print('Exception: $e');
       client.disconnect();
     }
-
-    const pubTopic = 'topic/open/#';
+    print(client.connectionStatus);
     final builder = MqttClientPayloadBuilder();
-    builder.addString('True');
-    client.publishMessage(pubTopic, MqttQos.atLeastOnce, builder.payload!);
+    builder.addUTF8String('val');
+    client.publishMessage('open/', MqttQos.atLeastOnce, builder.payload!);
+
+    print('publicou');
     client.disconnect();
+    return client;
   }
 }

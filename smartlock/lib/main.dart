@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartlock/components/LabList.dart';
+import 'package:smartlock/components/mqttservice.dart';
 import 'package:smartlock/models/Auth.dart';
 import 'package:smartlock/pages/AuthOrHome.dart';
 import 'package:smartlock/pages/AuthScreen.dart';
@@ -33,6 +34,9 @@ class MyApp extends StatelessWidget {
                 previous?.items ?? [],
               );
             }),
+        ChangeNotifierProvider(
+          create: (_) => mqttservice(),
+        ),
       ],
       child: MaterialApp(
           routes: {
