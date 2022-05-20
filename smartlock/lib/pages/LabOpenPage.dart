@@ -29,36 +29,38 @@ class LabOpenPage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               width: double.infinity,
-              color: Color.fromARGB(255, 34, 199, 169),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(laboratorio.Nome,
+                  Text('Campus ${laboratorio.Campus}',
                       textAlign: TextAlign.start,
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: Colors.grey,
                         fontSize: 20,
                       )),
                   Text(laboratorio.Descricao,
                       textAlign: TextAlign.end,
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: Colors.grey,
                         fontSize: 20,
                       )),
                 ],
               ),
             ),
-            SizedBox(height: 60),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.15),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pushNamed(AppRoutes.NfcOpen);
+                Navigator.of(context).pushNamed(
+                  AppRoutes.NfcOpen,
+                  arguments: laboratorio,
+                );
               },
               child: Text('Abrir'),
               style: ElevatedButton.styleFrom(
-                fixedSize: const Size(100, 100),
+                fixedSize: const Size(150, 150),
                 shape: const CircleBorder(),
               ),
-            )
+            ),
           ],
         ),
       ),
