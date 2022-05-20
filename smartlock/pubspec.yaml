@@ -27,7 +27,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  mqtt_client: ^7.2.1
+  mqtt_client: ^9.6.8
   flutter_nfc_kit: ^3.2.0
   flutter:
     sdk: flutter
@@ -39,6 +39,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   http: ^0.13.4
   provider: ^6.0.2
+  mqtt_client: ^9.6.8
 
 dev_dependencies:
   flutter_test:
