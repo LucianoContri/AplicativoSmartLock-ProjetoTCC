@@ -8,6 +8,7 @@ class LabOpenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final deviceSize = MediaQuery.of(context).size;
     final Laboratorio laboratorio =
         ModalRoute.of(context)!.settings.arguments as Laboratorio;
     return Scaffold(
@@ -48,17 +49,26 @@ class LabOpenPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.15),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed(
-                  AppRoutes.NfcOpen,
-                  arguments: laboratorio,
-                );
-              },
-              child: Text('Abrir'),
-              style: ElevatedButton.styleFrom(
-                fixedSize: const Size(150, 150),
-                shape: const CircleBorder(),
+            Container(
+              height: deviceSize.width * 0.25,
+              width: deviceSize.width * 0.70,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 20,
+              ),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(
+                    AppRoutes.NfcOpen,
+                    arguments: laboratorio,
+                  );
+                },
+                child: Text('Acessar'),
+                style: ElevatedButton.styleFrom(
+                  elevation: 8,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)),
+                ),
               ),
             ),
           ],

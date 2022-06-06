@@ -23,8 +23,15 @@ class _NfcOpenPageState extends State<NfcOpenPage> {
         ModalRoute.of(context)!.settings.arguments as Laboratorio;
     return Scaffold(
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
+          SizedBox(height: 50),
+          const Text('Aproxime o seu celular da fechadura',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Color.fromARGB(255, 0, 74, 57),
+                fontSize: 20,
+              )),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -34,19 +41,64 @@ class _NfcOpenPageState extends State<NfcOpenPage> {
                   onPressed: () async {
                     var availability = await FlutterNfcKit.nfcAvailability;
                     if (availability != NFCAvailability.available) {
-                      // oh-no
-                      print('NFCOFF');
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('NFC desligado'),
+                          content: Text('Ative-o em seu smartphone'),
+                          actions: [
+                            TextButton(
+                              child: Text('OK'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        ),
+                      );
                     }
 // timeout only works on Android, while the latter two messages are only for iOS
                     var tag = await FlutterNfcKit.poll(
                         timeout: Duration(seconds: 10),
                         iosMultipleTagMessage: "Multiple tags found!",
                         iosAlertMessage: "Scan your tag");
+
                     if (laboratorio.chaveNFC == tag.id) {
                       print("tag correta");
                       Provider.of<mqttservice>(context, listen: false)
-                          .connect();
+                          .connect(laboratorio.Nome);
+
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('Acesso Concluído'),
+                          content: Text(''),
+                          actions: [
+                            TextButton(
+                              child: Text('OK'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        ),
+                      );
                     } else {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('Acesso Negado'),
+                          content: Text(''),
+                          actions: [
+                            TextButton(
+                              child: Text('OK'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        ),
+                      );
                       print("tag errada");
                     }
                     print(jsonEncode(tag));
@@ -72,6 +124,13 @@ class _NfcOpenPageState extends State<NfcOpenPage> {
               ),
             ],
           ),
+          SizedBox(height: 100),
+          const Text('Powered by NFC™',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Color.fromARGB(255, 0, 74, 57),
+                fontSize: 17,
+              )),
         ],
       ),
     );

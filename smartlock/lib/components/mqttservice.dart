@@ -3,7 +3,7 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
 class mqttservice with ChangeNotifier {
-  Future<MqttServerClient> connect() async {
+  Future<MqttServerClient> connect(String Nome) async {
     MqttServerClient client =
         MqttServerClient.withPort('broker.emqx.io', 'flutter_client', 1883);
     print('entrou');
@@ -24,8 +24,8 @@ class mqttservice with ChangeNotifier {
     }
     print(client.connectionStatus);
     final builder = MqttClientPayloadBuilder();
-    builder.addUTF8String('val');
-    client.publishMessage('open/', MqttQos.atLeastOnce, builder.payload!);
+    builder.addUTF8String('True');
+    client.publishMessage(Nome, MqttQos.atLeastOnce, builder.payload!);
 
     print('publicou');
     client.disconnect();
