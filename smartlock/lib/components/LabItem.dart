@@ -36,7 +36,7 @@ class LabItem extends StatelessWidget {
           title: Text(lab.nome),
           trailing: IconButton(
             onPressed: () {},
-            icon: origin == Constants.RESERVE
+            icon: origin == Constants.Reserve
                 ? const Icon(Icons.add_circle_outline_outlined)
                 : const Icon(Icons.key),
           ),

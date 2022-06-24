@@ -13,6 +13,7 @@ class LabApprovePage extends StatefulWidget {
 }
 
 class _LabApprovePageState extends State<LabApprovePage> {
+  @override
   void initState() {
     super.initState();
     _loadRequests(context);
@@ -24,7 +25,7 @@ class _LabApprovePageState extends State<LabApprovePage> {
       listen: false,
     );
     return provider
-        .loadReserves(context, Constants.RESERVE)
+        .loadReserves(context, Constants.Reserve)
         .then((value) => provider.updateLoading(false));
   }
 

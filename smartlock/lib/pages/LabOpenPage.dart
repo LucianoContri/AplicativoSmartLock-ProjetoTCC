@@ -40,11 +40,9 @@ class LabOpenPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              child: Image.network(
-                lab.urlImagem,
-                fit: BoxFit.cover,
-              ),
+            Image.network(
+              lab.urlImagem,
+              fit: BoxFit.cover,
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -69,10 +67,10 @@ class LabOpenPage extends StatelessWidget {
               ),
             ),
             SizedBox(
-                height: origin == Constants.RESERVE
+                height: origin == Constants.Reserve
                     ? MediaQuery.of(context).size.height * 0.03
                     : MediaQuery.of(context).size.height * 0.15),
-            if (origin == Constants.RESERVE)
+            if (origin == Constants.Reserve)
               Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -163,7 +161,7 @@ class LabOpenPage extends StatelessWidget {
                 vertical: 20,
               ),
               child: ElevatedButton(
-                onPressed: origin == Constants.RESERVE
+                onPressed: origin == Constants.Reserve
                     ? () async {
                         User user = await auth.getUser(auth.uid);
                         provider.reserveLab(
@@ -173,7 +171,7 @@ class LabOpenPage extends StatelessWidget {
                         );
                       }
                     : () {
-                        if (origin == Constants.APPROVE &&
+                        if (origin == Constants.Approve &&
                             reserve != null &&
                             DateTime.now().isAfter(reserve.horario
                                 .subtract(const Duration(minutes: 15))) &&
@@ -203,7 +201,7 @@ class LabOpenPage extends StatelessWidget {
                           );
                         }
                       },
-                child: origin == Constants.RESERVE
+                child: origin == Constants.Reserve
                     ? const Text('Reservar')
                     : const Text('Acessar'),
                 style: ElevatedButton.styleFrom(

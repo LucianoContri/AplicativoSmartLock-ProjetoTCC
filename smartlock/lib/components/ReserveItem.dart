@@ -163,7 +163,7 @@ class ReserveItem extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       provider
-                          .saveItem(context, Constants.REFUSED, request)
+                          .saveItem(context, Constants.Refused, request)
                           .then((value) {
                         provider.updateLoading(false);
                         Navigator.of(context).pushNamed(AppRoutes.labApprove);
@@ -181,7 +181,7 @@ class ReserveItem extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       provider
-                          .saveItem(context, Constants.ACCEPTED, request)
+                          .saveItem(context, Constants.Accepted, request)
                           .then((value) {
                         provider.updateLoading(false);
                         Navigator.of(context).pushNamed(AppRoutes.labApprove);
@@ -201,7 +201,7 @@ class ReserveItem extends StatelessWidget {
             ]),
           ),
           decoration: BoxDecoration(
-            color: Color.fromARGB(195, 218, 251, 255),
+            color: const Color.fromARGB(195, 218, 251, 255),
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(8.0),
             boxShadow: const [

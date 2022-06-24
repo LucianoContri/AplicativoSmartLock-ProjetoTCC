@@ -20,7 +20,7 @@ class _NfcOpenPageState extends State<NfcOpenPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          SizedBox(height: 50),
+          const SizedBox(height: 50),
           const Text('Aproxime o seu celular da fechadura',
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -116,7 +116,7 @@ class _NfcOpenPageState extends State<NfcOpenPage> {
               ),
             ],
           ),
-          SizedBox(height: 100),
+          const SizedBox(height: 100),
           const Text('Powered by NFC™',
               textAlign: TextAlign.center,
               style: TextStyle(

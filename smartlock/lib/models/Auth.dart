@@ -70,7 +70,7 @@ class Auth with ChangeNotifier {
       );
       if (urlFragment == 'signUp') {
         final responseSignUp = await http.put(
-          Uri.parse('${Constants.usuarios_URL}/$_uid.json?auth=$_token'),
+          Uri.parse('${Constants.UsuariosURL}/$_uid.json?auth=$_token'),
           body: jsonEncode(
             {
               "campus": campus,
@@ -109,7 +109,7 @@ class Auth with ChangeNotifier {
 
   Future<UserData> getUserData(String? uId) async {
     final response = await http.get(
-      Uri.parse('${Constants.usuarios_URL}/$uId.json?auth=$_token'),
+      Uri.parse('${Constants.UsuariosURL}/$uId.json?auth=$_token'),
     );
     Map<String, dynamic> data = jsonDecode(response.body);
     return UserData(

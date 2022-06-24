@@ -23,7 +23,7 @@ class LabList with ChangeNotifier {
 
   Future<void> addLab(Laboratorio laboratorio) async {
     final response = await http.post(
-      Uri.parse('${Constants.laboratorios_URL}.json?auth=$_token'),
+      Uri.parse('${Constants.LaboratoriosURL}.json?auth=$_token'),
       body: jsonEncode(
         {
           "Nome": laboratorio.nome,
@@ -59,7 +59,7 @@ class LabList with ChangeNotifier {
     if (auth.isAdmin == null) {
       await auth.setUserData(auth.uid);
     }
-    String query = '${Constants.laboratorios_URL}.json?auth=$_token';
+    String query = '${Constants.LaboratoriosURL}.json?auth=$_token';
     if (!auth.isAdmin!) {
       campus = auth.campus;
     }

@@ -15,6 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
   void initState() {
     super.initState();
     _refreshProducts(context);
@@ -26,7 +27,7 @@ class _HomePageState extends State<HomePage> {
       listen: false,
     );
     return provider
-        .loadReserves(context, Constants.APPROVE)
+        .loadReserves(context, Constants.Approve)
         .then((value) => provider.updateLoading(false));
   }
 
@@ -58,7 +59,7 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
             child: Column(
-              children: [LabGrid(origin: Constants.APPROVE)],
+              children: [LabGrid(origin: Constants.Approve)],
             ),
           ),
         ),

@@ -109,7 +109,7 @@ class _LabAddPageState extends State<LabAddPage> {
                 onSaved: (urlImagem) =>
                     _formData['UrlImagem'] = urlImagem ?? '',
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

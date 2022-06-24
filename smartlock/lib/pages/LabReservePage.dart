@@ -23,6 +23,7 @@ class _LabReservePageState extends State<LabReservePage> {
     _CampusFocus.dispose();
   }
 
+  @override
   void initState() {
     super.initState();
     Auth auth = Provider.of(context, listen: false);
@@ -80,7 +81,7 @@ class _LabReservePageState extends State<LabReservePage> {
                   decoration:
                       const InputDecoration(labelText: 'Selecione o campus'),
                 ),
-                LabGrid(origin: Constants.RESERVE),
+                LabGrid(origin: Constants.Reserve),
               ],
             ),
           ),

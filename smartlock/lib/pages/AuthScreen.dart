@@ -19,9 +19,7 @@ class AuthScreen extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(30.0),
-              child: Container(
-                child: Image.asset('assets/images/icon2.png'),
-              ),
+              child: Image.asset('assets/images/icon2.png'),
             ),
             AuthForm(),
           ],
