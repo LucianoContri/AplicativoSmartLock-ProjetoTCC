@@ -46,16 +46,6 @@ class RequestList with ChangeNotifier {
     Map<String, dynamic> data = jsonDecode(response.body);
     if (data['error'] != null) {
       throw Exception(data['error']['message']);
-    } else {
-      _items.add(Reserve(
-        id: data['name'],
-        laboratorio: lab,
-        usuario: user,
-        horario: horario,
-        status: Constants.pending,
-        duracao: duracao,
-        integrantes: [],
-      ));
     }
     notifyListeners();
   }
@@ -113,7 +103,9 @@ class RequestList with ChangeNotifier {
     if (type == Constants.approve) {
       data.removeWhere((key, value) =>
           value['Usuario'] != auth.uid ||
-          DateTime.now().isAfter(DateTime.parse(data[key]['Horario'])));
+          DateTime.now()
+              .subtract(const Duration(days: 1))
+              .isAfter(DateTime.parse(data[key]['Horario'])));
     }
     for (String key in data.keys) {
       Laboratorio lab = await getLab(data[key]['Laboratorio']);

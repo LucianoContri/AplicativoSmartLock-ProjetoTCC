@@ -164,11 +164,11 @@ class LabOpenPage extends StatelessWidget {
                 onPressed: origin == Constants.reserve
                     ? () async {
                         User user = await auth.getUser(auth.uid);
-                        provider.reserveLab(
-                            lab, _duracao!, _horario!, [], user);
-                        Navigator.of(context).pushNamed(
-                          AppRoutes.authOrHome,
-                        );
+                        provider
+                            .reserveLab(lab, _duracao!, _horario!, [], user)
+                            .then((value) => Navigator.of(context)
+                                .pushNamedAndRemoveUntil(AppRoutes.authOrHome,
+                                    (Route<dynamic> route) => false));
                       }
                     : () {
                         if (origin == Constants.approve &&
