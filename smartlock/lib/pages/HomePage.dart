@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartlock/components/MainDrawer.dart';
 import 'package:smartlock/components/RequestList.dart';
+import 'package:smartlock/models/Auth.dart';
+import 'package:smartlock/utils/AppRoutes.dart';
 import 'package:smartlock/utils/Constants.dart';
 import '../components/LabGrid.dart';
 
@@ -35,7 +37,19 @@ class _HomePageState extends State<HomePage> {
         title: const Text(
           'Meus agendamentos',
         ),
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.logout))],
+        actions: [
+          IconButton(
+              onPressed: () {
+                Provider.of<Auth>(
+                  context,
+                  listen: false,
+                ).logout();
+                Navigator.of(context).pushReplacementNamed(
+                  AppRoutes.authOrHome,
+                );
+              },
+              icon: const Icon(Icons.logout))
+        ],
       ),
       drawer: MainDrawer(),
       body: RefreshIndicator(

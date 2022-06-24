@@ -59,8 +59,11 @@ class MainDrawer extends StatelessWidget {
             leading: const Icon(Icons.logout),
             title: const Text('Sair'),
             onTap: () async {
-              // clear cache
-              Navigator.of(context).pushNamed(
+              Provider.of<Auth>(
+                context,
+                listen: false,
+              ).logout();
+              Navigator.of(context).pushReplacementNamed(
                 AppRoutes.authOrHome,
               );
             },

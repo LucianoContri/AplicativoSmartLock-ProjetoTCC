@@ -35,7 +35,6 @@ class LabGrid extends StatelessWidget {
       provider = Provider.of<RequestList>(context);
       loadedProducts = provider.items as List<Reserve>;
     }
-    loadedProducts = provider.items;
     isLoading = provider.isLoading;
     return isLoading
         ? const Center(
@@ -78,22 +77,23 @@ class LabGrid extends StatelessWidget {
                   const SizedBox(
                     height: 50,
                   ),
-                  SizedBox(
-                    height: 50,
-                    width: 200,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            AppRoutes.authOrHome,
-                            (Route<dynamic> route) => false);
-                      },
-                      child: const Text("Atualizar"),
-                      style: ElevatedButton.styleFrom(
-                          elevation: 8,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15))),
+                  if (origin != Constants.RESERVE)
+                    SizedBox(
+                      height: 50,
+                      width: 200,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              AppRoutes.authOrHome,
+                              (Route<dynamic> route) => false);
+                        },
+                        child: const Text("Atualizar"),
+                        style: ElevatedButton.styleFrom(
+                            elevation: 8,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15))),
+                      ),
                     ),
-                  ),
                 ],
               )
             : Container(

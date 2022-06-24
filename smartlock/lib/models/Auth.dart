@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:smartlock/data/store.dart';
 import 'package:smartlock/exceptions/AuthException.dart';
 import 'package:smartlock/models/User.dart';
 import 'package:smartlock/models/UserData.dart';
@@ -14,6 +16,7 @@ class Auth with ChangeNotifier {
   String? _campus;
   DateTime? _expireDate;
   bool? _isAdmin;
+  Timer? _logoutTimer;
 
   bool get isAuth {
     final isValid = _expireDate?.isAfter(DateTime.now()) ?? false;
@@ -83,6 +86,15 @@ class Auth with ChangeNotifier {
           _isAdmin = bodySignUp['admin'];
         }
       }
+
+      Store.saveMap('userData', {
+        'token': _token,
+        'email': _email,
+        'userId': _uid,
+        'expiryDate': _expireDate!.toIso8601String(),
+      });
+
+      _autoLogout();
       notifyListeners();
     }
   }
@@ -135,6 +147,50 @@ class Auth with ChangeNotifier {
       campus: userLab.campus,
       email: data['users'][0]['email'],
       nome: data['users'][0]['displayName'],
+    );
+  }
+
+  Future<void> tryAutoLogin() async {
+    if (isAuth) return;
+
+    final userData = await Store.getMap('userData');
+    if (userData.isEmpty) return;
+
+    final expiryDate = DateTime.parse(userData['expiryDate']);
+    if (expiryDate.isBefore(DateTime.now())) return;
+
+    _token = userData['token'];
+    _email = userData['email'];
+    _uid = userData['userId'];
+    _expireDate = expiryDate;
+
+    _autoLogout();
+    notifyListeners();
+  }
+
+  void logout() {
+    _token = null;
+    _email = null;
+    _uid = null;
+    _expireDate = null;
+    _clearLogoutTimer();
+    Store.remove('userData').then((_) {
+      notifyListeners();
+    });
+  }
+
+  void _clearLogoutTimer() {
+    _logoutTimer?.cancel();
+    _logoutTimer = null;
+  }
+
+  void _autoLogout() {
+    _clearLogoutTimer();
+    final timeToLogout = _expireDate?.difference(DateTime.now()).inSeconds;
+    print(timeToLogout);
+    _logoutTimer = Timer(
+      Duration(seconds: timeToLogout ?? 0),
+      logout,
     );
   }
 }
