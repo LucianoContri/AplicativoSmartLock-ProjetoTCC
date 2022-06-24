@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
       listen: false,
     );
     return provider
-        .loadReserves(context, Constants.Approve)
+        .loadReserves(context, Constants.approve)
         .then((value) => provider.updateLoading(false));
   }
 
@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
             child: Column(
-              children: [LabGrid(origin: Constants.Approve)],
+              children: [LabGrid(origin: Constants.approve)],
             ),
           ),
         ),

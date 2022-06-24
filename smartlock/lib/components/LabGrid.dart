@@ -18,7 +18,7 @@ class LabGrid extends StatelessWidget {
     List<Reserve> loadedProducts;
     final provider;
     bool isLoading;
-    if (origin == Constants.Reserve) {
+    if (origin == Constants.reserve) {
       provider = Provider.of<LabList>(context);
       loadedProducts = [];
       for (Laboratorio i in provider.items as List<Laboratorio>) {
@@ -77,7 +77,7 @@ class LabGrid extends StatelessWidget {
                   const SizedBox(
                     height: 50,
                   ),
-                  if (origin != Constants.Reserve)
+                  if (origin != Constants.reserve)
                     SizedBox(
                       height: 50,
                       width: 200,
@@ -102,11 +102,11 @@ class LabGrid extends StatelessWidget {
                   padding: const EdgeInsets.all(10),
                   itemCount: loadedProducts.length,
                   itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
-                    value: (origin == Constants.Reserve)
+                    value: (origin == Constants.reserve)
                         ? loadedProducts[i]
                         : loadedProducts[i].laboratorio,
                     child: LabItem(
-                      reserve: (origin == Constants.Reserve)
+                      reserve: (origin == Constants.reserve)
                           ? null
                           : loadedProducts[i],
                       laboratorio: loadedProducts[i].laboratorio,

@@ -1,14 +1,14 @@
 class Constants {
-  static const LaboratoriosURL =
+  static const laboratoriosURL =
       'https://smartlocktcc-default-rtdb.firebaseio.com/Laborat%C3%B3rios';
-  static const UsuariosURL =
+  static const usuariosURL =
       'https://smartlocktcc-default-rtdb.firebaseio.com/Usu%C3%A1rios';
-  static const ReservasURL =
+  static const reservasURL =
       'https://smartlocktcc-default-rtdb.firebaseio.com/Reservas';
   static const allLabsAdmin = "Todos";
-  static const Reserve = "RESERVE";
-  static const Approve = "APPROVE";
-  static const Pending = "PENDING";
-  static const Refused = "REFUSED";
-  static const Accepted = "ACCEPTED";
+  static const reserve = "RESERVE";
+  static const approve = "APPROVE";
+  static const pending = "PENDING";
+  static const refused = "REFUSED";
+  static const accepted = "ACCEPTED";
 }

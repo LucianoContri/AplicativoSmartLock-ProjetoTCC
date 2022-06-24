@@ -67,10 +67,10 @@ class LabOpenPage extends StatelessWidget {
               ),
             ),
             SizedBox(
-                height: origin == Constants.Reserve
+                height: origin == Constants.reserve
                     ? MediaQuery.of(context).size.height * 0.03
                     : MediaQuery.of(context).size.height * 0.15),
-            if (origin == Constants.Reserve)
+            if (origin == Constants.reserve)
               Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -161,7 +161,7 @@ class LabOpenPage extends StatelessWidget {
                 vertical: 20,
               ),
               child: ElevatedButton(
-                onPressed: origin == Constants.Reserve
+                onPressed: origin == Constants.reserve
                     ? () async {
                         User user = await auth.getUser(auth.uid);
                         provider.reserveLab(
@@ -171,7 +171,7 @@ class LabOpenPage extends StatelessWidget {
                         );
                       }
                     : () {
-                        if (origin == Constants.Approve &&
+                        if (origin == Constants.approve &&
                             reserve != null &&
                             DateTime.now().isAfter(reserve.horario
                                 .subtract(const Duration(minutes: 15))) &&
@@ -201,7 +201,7 @@ class LabOpenPage extends StatelessWidget {
                           );
                         }
                       },
-                child: origin == Constants.Reserve
+                child: origin == Constants.reserve
                     ? const Text('Reservar')
                     : const Text('Acessar'),
                 style: ElevatedButton.styleFrom(

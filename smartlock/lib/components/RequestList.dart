@@ -30,13 +30,13 @@ class RequestList with ChangeNotifier {
     }
 
     final response = await http.post(
-      Uri.parse('${Constants.ReservasURL}.json?auth=$_token'),
+      Uri.parse('${Constants.reservasURL}.json?auth=$_token'),
       body: jsonEncode(
         {
           "Laboratorio": lab.id,
           "Usuario": user.id,
           "Horario": horario.toString(),
-          "Status": Constants.Pending,
+          "Status": Constants.pending,
           "Duracao": duracao.inSeconds,
           "Integrantes": integrantes,
         },
@@ -52,7 +52,7 @@ class RequestList with ChangeNotifier {
         laboratorio: lab,
         usuario: user,
         horario: horario,
-        status: Constants.Pending,
+        status: Constants.pending,
         duracao: duracao,
         integrantes: [],
       ));
@@ -65,10 +65,10 @@ class RequestList with ChangeNotifier {
     bool isReserved = false;
     final response = await http.get(
       Uri.parse(
-          '${Constants.ReservasURL}.json?auth=$_token&orderBy="Status"&startAt="' +
-              Constants.Accepted +
+          '${Constants.reservasURL}.json?auth=$_token&orderBy="Status"&startAt="' +
+              Constants.accepted +
               '"&endAt="' +
-              Constants.Accepted +
+              Constants.accepted +
               '"'),
     );
     Map<String, dynamic> data = jsonDecode(response.body);
@@ -94,23 +94,23 @@ class RequestList with ChangeNotifier {
       await auth.setUserData(auth.uid);
     }
     String query =
-        '${Constants.ReservasURL}.json?auth=$_token&orderBy="Status"&startAt="' +
-            (type == Constants.Reserve
-                ? Constants.Pending
-                : Constants.Accepted) +
+        '${Constants.reservasURL}.json?auth=$_token&orderBy="Status"&startAt="' +
+            (type == Constants.reserve
+                ? Constants.pending
+                : Constants.accepted) +
             '"&endAt="' +
-            (type == Constants.Reserve
-                ? Constants.Pending
-                : Constants.Accepted) +
+            (type == Constants.reserve
+                ? Constants.pending
+                : Constants.accepted) +
             '"';
-    if (!auth.isAdmin! && type == Constants.Reserve) {
+    if (!auth.isAdmin! && type == Constants.reserve) {
       return;
     }
     final response = await http.get(
       Uri.parse(query),
     );
     Map<String, dynamic> data = jsonDecode(response.body);
-    if (type == Constants.Approve) {
+    if (type == Constants.approve) {
       data.removeWhere((key, value) =>
           value['Usuario'] != auth.uid ||
           DateTime.now().isAfter(DateTime.parse(data[key]['Horario'])));
@@ -123,9 +123,9 @@ class RequestList with ChangeNotifier {
           id: key,
           laboratorio: lab,
           usuario: user,
-          status: type == Constants.Reserve
-              ? Constants.Pending
-              : Constants.Accepted,
+          status: type == Constants.reserve
+              ? Constants.pending
+              : Constants.accepted,
           horario: DateTime.parse(data[key]['Horario']),
           duracao: Duration(seconds: data[key]['Duracao']),
           integrantes: [],
@@ -137,7 +137,7 @@ class RequestList with ChangeNotifier {
 
   Future<Laboratorio> getLab(String labId) async {
     String query =
-        '${Constants.LaboratoriosURL}.json?auth=$_token&orderBy="\$key"&startAt="' +
+        '${Constants.laboratoriosURL}.json?auth=$_token&orderBy="\$key"&startAt="' +
             labId +
             '"&endAt="' +
             labId +
@@ -172,7 +172,7 @@ class RequestList with ChangeNotifier {
       return;
     }
     final response = await http.patch(
-      Uri.parse('${Constants.ReservasURL}.json?auth=$_token'),
+      Uri.parse('${Constants.reservasURL}.json?auth=$_token'),
       body: jsonEncode(
         {
           reserve.id + '/Status': type,

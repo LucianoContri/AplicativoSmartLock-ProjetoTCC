@@ -81,7 +81,7 @@ class _LabReservePageState extends State<LabReservePage> {
                   decoration:
                       const InputDecoration(labelText: 'Selecione o campus'),
                 ),
-                LabGrid(origin: Constants.Reserve),
+                LabGrid(origin: Constants.reserve),
               ],
             ),
           ),

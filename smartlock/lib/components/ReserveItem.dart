@@ -163,7 +163,7 @@ class ReserveItem extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       provider
-                          .saveItem(context, Constants.Refused, request)
+                          .saveItem(context, Constants.refused, request)
                           .then((value) {
                         provider.updateLoading(false);
                         Navigator.of(context).pushNamed(AppRoutes.labApprove);
@@ -181,7 +181,7 @@ class ReserveItem extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       provider
-                          .saveItem(context, Constants.Accepted, request)
+                          .saveItem(context, Constants.accepted, request)
                           .then((value) {
                         provider.updateLoading(false);
                         Navigator.of(context).pushNamed(AppRoutes.labApprove);

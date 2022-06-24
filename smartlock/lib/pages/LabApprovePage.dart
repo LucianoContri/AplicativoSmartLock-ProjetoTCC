@@ -25,7 +25,7 @@ class _LabApprovePageState extends State<LabApprovePage> {
       listen: false,
     );
     return provider
-        .loadReserves(context, Constants.Reserve)
+        .loadReserves(context, Constants.reserve)
         .then((value) => provider.updateLoading(false));
   }
 
