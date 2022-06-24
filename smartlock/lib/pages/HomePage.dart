@@ -1,13 +1,9 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:smartlock/components/MainDrawer.dart';
-
-import '../components/LabList.dart';
+import 'package:smartlock/components/RequestList.dart';
+import 'package:smartlock/utils/Constants.dart';
 import '../components/LabGrid.dart';
-import '../data/dadosdeteste.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,17 +15,17 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
-    Provider.of<LabList>(
-      context,
-      listen: false,
-    ).loadProducts();
+    _refreshProducts(context);
   }
 
   Future<void> _refreshProducts(BuildContext context) {
-    return Provider.of<LabList>(
+    final provider = Provider.of<RequestList>(
       context,
       listen: false,
-    ).loadProducts();
+    );
+    return provider
+        .loadReserves(context, Constants.APPROVE)
+        .then((value) => provider.updateLoading(false));
   }
 
   @override
@@ -37,18 +33,19 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Laboratórios',
-          style: TextStyle(color: Colors.grey),
+          'Meus agendamentos',
         ),
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.logout))],
+        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.logout))],
       ),
       drawer: MainDrawer(),
       body: RefreshIndicator(
         onRefresh: () => _refreshProducts(context),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [LabGrid()],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [LabGrid(origin: Constants.APPROVE)],
+            ),
           ),
         ),
       ),

@@ -7,14 +7,14 @@ class AuthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 239, 239, 239),
+      backgroundColor: const Color.fromARGB(255, 239, 239, 239),
       appBar: AppBar(
         title: const Text(
           'Smart Lock',
-          style: TextStyle(color: Colors.grey),
         ),
       ),
       body: SingleChildScrollView(
+        reverse: true,
         child: Column(
           children: [
             Padding(

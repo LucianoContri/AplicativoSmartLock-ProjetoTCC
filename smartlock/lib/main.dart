@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:smartlock/components/LabList.dart';
-import 'package:smartlock/components/mqttservice.dart';
+import 'package:smartlock/components/MqttService.dart';
+import 'package:smartlock/components/RequestList.dart';
 import 'package:smartlock/models/Auth.dart';
 import 'package:smartlock/pages/AuthOrHome.dart';
-import 'package:smartlock/pages/AuthScreen.dart';
-import 'package:smartlock/pages/HomePage.dart';
 import 'package:smartlock/pages/LabAddPage.dart';
+import 'package:smartlock/pages/LabApprovePage.dart';
 import 'package:smartlock/pages/LabOpenPage.dart';
+import 'package:smartlock/pages/LabReservePage.dart';
 import 'package:smartlock/pages/NfcOpenPage.dart';
-import 'utils/app_routes.dart';
+import 'utils/AppRoutes.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData Tema = ThemeData();
+    final ThemeData tema = ThemeData();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -35,19 +36,30 @@ class MyApp extends StatelessWidget {
               );
             }),
         ChangeNotifierProvider(
-          create: (_) => mqttservice(),
+          create: (_) => MqttService(),
+        ),
+        ChangeNotifierProxyProvider<Auth, RequestList>(
+          create: (_) => RequestList('', []),
+          update: (ctx, auth, previous) {
+            return RequestList(
+              auth.token ?? '',
+              previous?.items ?? [],
+            );
+          },
         ),
       ],
       child: MaterialApp(
           routes: {
-            AppRoutes.AuthOrHome: (ctx) => AuthOrHome(),
-            AppRoutes.LabOpen: (ctx) => LabOpenPage(),
-            AppRoutes.NfcOpen: (ctx) => NfcOpenPage(),
-            AppRoutes.LabAdd: (ctx) => LabAddPage(),
+            AppRoutes.authOrHome: (ctx) => AuthOrHome(),
+            AppRoutes.labOpen: (ctx) => LabOpenPage(),
+            AppRoutes.nfcOpen: (ctx) => NfcOpenPage(),
+            AppRoutes.labAdd: (ctx) => LabAddPage(),
+            AppRoutes.labReserve: (ctx) => LabReservePage(),
+            AppRoutes.labApprove: (ctx) => LabApprovePage(),
           },
-          theme: Tema.copyWith(
-              colorScheme: Tema.colorScheme.copyWith(
-                primary: Color.fromARGB(255, 34, 199, 169),
+          theme: tema.copyWith(
+              colorScheme: tema.colorScheme.copyWith(
+                primary: const Color.fromARGB(255, 34, 199, 169),
                 secondary: Colors.red,
               ),
               // textTheme: Tema.textTheme.copyWith(

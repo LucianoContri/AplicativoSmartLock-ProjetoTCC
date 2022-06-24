@@ -2,18 +2,18 @@ import 'package:flutter/cupertino.dart';
 
 class Laboratorio with ChangeNotifier {
   final String id;
-  final String Nome;
-  final String Campus;
-  final String Descricao;
-  final String UrlImagem;
+  final String nome;
+  final String campus;
+  final String descricao;
+  final String urlImagem;
   final String chaveNFC;
 
   Laboratorio({
     required this.id,
-    required this.Nome,
-    required this.Campus,
-    required this.Descricao,
-    required this.UrlImagem,
+    required this.nome,
+    required this.campus,
+    required this.descricao,
+    required this.urlImagem,
     required this.chaveNFC,
   });
 }

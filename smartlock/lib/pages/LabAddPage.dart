@@ -1,9 +1,10 @@
 import 'dart:math';
 
+import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:smartlock/components/LabList.dart';
+import 'package:smartlock/models/Campus.dart';
 import 'package:smartlock/models/Labs.dart';
 
 class LabAddPage extends StatefulWidget {
@@ -20,12 +21,6 @@ class _LabAddPageState extends State<LabAddPage> {
   final _ChaveNFCFocus = FocusNode();
   final _imageUrlFocus = FocusNode();
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _imageUrlFocus.addListener(updateImage);
-  // }as
-
   final _formkey = GlobalKey<FormState>();
   final _formData = Map<String, Object>();
 
@@ -41,19 +36,22 @@ class _LabAddPageState extends State<LabAddPage> {
 
   void _submitForm() {
     _formkey.currentState?.save();
+    String campus = Campus.values.firstWhere((e) =>
+        e.toString().toUpperCase() ==
+        removeDiacritics(_formData['Campus'].toString()).toUpperCase());
     final newlab = Laboratorio(
       id: Random().nextDouble().toString(),
-      Nome: _formData['Nome'] as String,
-      Campus: _formData['Campus'] as String,
-      Descricao: _formData['Descricao'] as String,
-      UrlImagem: _formData['UrlImagem'] as String,
+      nome: _formData['Nome'] as String,
+      campus: campus,
+      descricao: _formData['Descricao'] as String,
+      urlImagem: _formData['UrlImagem'] as String,
       chaveNFC: _formData['chaveNFC'] as String,
     );
 
     Provider.of<LabList>(
       context,
       listen: false,
-    ).AddLab(newlab);
+    ).addLab(newlab);
 
     Navigator.of(context).pop();
   }
@@ -62,13 +60,7 @@ class _LabAddPageState extends State<LabAddPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Formulário do Laboratório'),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.save),
-          ),
-        ],
+        title: const Text('Formulário do Laboratório'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(15),
@@ -77,37 +69,45 @@ class _LabAddPageState extends State<LabAddPage> {
           child: ListView(
             children: [
               TextFormField(
-                decoration: InputDecoration(labelText: 'Nome'),
+                decoration: const InputDecoration(labelText: 'Nome'),
                 textInputAction: TextInputAction.next,
                 focusNode: _NomeFocus,
-                onSaved: (Nome) => _formData['Nome'] = Nome ?? '',
+                onSaved: (nome) => _formData['Nome'] = nome ?? '',
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Descrição'),
+                decoration: const InputDecoration(labelText: 'Descrição'),
                 textInputAction: TextInputAction.next,
                 focusNode: _DescricaoFocus,
-                onSaved: (Descricao) =>
-                    _formData['Descricao'] = Descricao ?? '',
+                onSaved: (descricao) =>
+                    _formData['Descricao'] = descricao ?? '',
               ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Campus'),
-                textInputAction: TextInputAction.next,
+              DropdownButtonFormField(
+                items: Campus.display.map((String items) {
+                  return DropdownMenuItem(
+                    value: items,
+                    child: Text(items),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState() {}
+                },
                 focusNode: _CampusFocus,
-                onSaved: (Campus) => _formData['Campus'] = Campus ?? '',
+                onSaved: (campus) => _formData['Campus'] = campus ?? '',
+                decoration: const InputDecoration(labelText: 'Campus'),
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Chave NFC'),
+                decoration: const InputDecoration(labelText: 'Chave NFC'),
                 textInputAction: TextInputAction.next,
                 focusNode: _ChaveNFCFocus,
                 onSaved: (chaveNFC) => _formData['chaveNFC'] = chaveNFC ?? '',
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Url Imagem'),
+                decoration: const InputDecoration(labelText: 'Url Imagem'),
                 textInputAction: TextInputAction.done,
                 keyboardType: TextInputType.url,
                 focusNode: _imageUrlFocus,
-                onSaved: (UrlImagem) =>
-                    _formData['UrlImagem'] = UrlImagem ?? '',
+                onSaved: (urlImagem) =>
+                    _formData['UrlImagem'] = urlImagem ?? '',
               ),
               SizedBox(height: 20),
               Row(
@@ -115,7 +115,7 @@ class _LabAddPageState extends State<LabAddPage> {
                 children: [
                   ElevatedButton(
                     onPressed: _submitForm,
-                    child: Text('Adicionar'),
+                    child: const Text('Adicionar'),
                     style: ElevatedButton.styleFrom(
                       fixedSize: const Size(100, 40),
                     ),

@@ -1,9 +1,11 @@
+import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smartlock/exceptions/AuthException.dart';
 import 'package:smartlock/models/Auth.dart';
+import 'package:smartlock/models/Campus.dart';
 
-enum AuthMode { Signup, Login }
+enum AuthMode { signup, login }
 
 class AuthForm extends StatefulWidget {
   const AuthForm({Key? key}) : super(key: key);
@@ -17,22 +19,21 @@ class _AuthFormState extends State<AuthForm> {
   final _formKeyEmail = GlobalKey<FormState>();
   final _formKeyPassword = GlobalKey<FormState>();
   final _formKeyConfirm = GlobalKey<FormState>();
-  bool _isLoading = false;
-  AuthMode _authMode = AuthMode.Login;
-  Map<String, String> _AuthData = {
-    'email': '',
-    'password': '',
-  };
+  final _formKeyCampus = GlobalKey<FormState>();
 
-  bool _isLogin() => _authMode == AuthMode.Login;
-  bool _isSignup() => _authMode == AuthMode.Signup;
+  bool _isLoading = false;
+  AuthMode _authMode = AuthMode.login;
+  Map<String, String> _AuthData = {'email': '', 'password': '', 'campus': ''};
+
+  bool _isLogin() => _authMode == AuthMode.login;
+  bool _isSignup() => _authMode == AuthMode.signup;
 
   void _SwitchAuthMode() {
     setState(() {
       if (_isLogin()) {
-        _authMode = AuthMode.Signup;
+        _authMode = AuthMode.signup;
       } else {
-        _authMode = AuthMode.Login;
+        _authMode = AuthMode.login;
       }
     });
   }
@@ -41,12 +42,12 @@ class _AuthFormState extends State<AuthForm> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(''),
+        title: const Text(''),
         content: Text(mensagem),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: Text('Fechar'),
+            child: const Text('Fechar'),
           )
         ],
       ),
@@ -57,15 +58,18 @@ class _AuthFormState extends State<AuthForm> {
     final isEmailValid = _formKeyEmail.currentState?.validate() ?? false;
     final isPasswordValid = _formKeyPassword.currentState?.validate() ?? false;
     final isConfirmValid = _formKeyConfirm.currentState?.validate() ?? false;
+    final isCampusValid = _formKeyCampus.currentState?.validate() ?? false;
 
     final isValidLogin = isEmailValid && isPasswordValid;
-    final isValidSignup = isConfirmValid && isEmailValid && isPasswordValid;
+    final isValidSignup =
+        isConfirmValid && isEmailValid && isPasswordValid && isCampusValid;
 
     setState(() => _isLoading = true);
 
     _formKeyEmail.currentState?.save();
     _formKeyPassword.currentState?.save();
     _formKeyConfirm.currentState?.save();
+    _formKeyCampus.currentState?.save();
     Auth auth = Provider.of(context, listen: false);
 
     try {
@@ -78,21 +82,22 @@ class _AuthFormState extends State<AuthForm> {
         await auth.signup(
           _AuthData['email']!,
           _AuthData['password']!,
+          _AuthData['campus']!,
         );
       }
     } on AuthException catch (error) {
+      print('Exception: $error');
       _showErrorDialog(error.toString());
     } catch (error) {
-      _showErrorDialog('Ocorreu um erro, é a vida!');
+      print('Exception: $error');
+      _showErrorDialog('Ocorreu um erro');
     }
-
     setState(() => _isLoading = false);
   }
 
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-
     return Column(
       children: [
         Card(
@@ -106,7 +111,7 @@ class _AuthFormState extends State<AuthForm> {
               width: deviceSize.width * 0.90,
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: TextFormField(
-                decoration: InputDecoration(labelText: 'E-mail'),
+                decoration: const InputDecoration(labelText: 'E-mail'),
                 keyboardType: TextInputType.emailAddress,
                 onSaved: (email) => _AuthData['email'] = email ?? '',
                 validator: (_email) {
@@ -131,15 +136,15 @@ class _AuthFormState extends State<AuthForm> {
               width: deviceSize.width * 0.90,
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: TextFormField(
-                  decoration: InputDecoration(labelText: 'Senha'),
+                  decoration: const InputDecoration(labelText: 'Senha'),
                   keyboardType: TextInputType.emailAddress,
                   obscureText: true,
                   controller: _passwordController,
                   onSaved: (senha) => _AuthData['password'] = senha ?? '',
                   validator: (_password) {
                     final password = _password ?? '';
-                    if (password.isEmpty || password.length < 5) {
-                      return 'informe uma senha válida';
+                    if (password.isEmpty || password.length < 6) {
+                      return 'informe uma senha válida (Mínimo 6 caracteres)';
                     }
                     return null;
                   }),
@@ -158,7 +163,8 @@ class _AuthFormState extends State<AuthForm> {
                 width: deviceSize.width * 0.90,
                 padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                 child: TextFormField(
-                  decoration: InputDecoration(labelText: 'Confirmar Senha'),
+                  decoration:
+                      const InputDecoration(labelText: 'Confirmar Senha'),
                   keyboardType: TextInputType.emailAddress,
                   obscureText: true,
                   validator: _isLogin()
@@ -167,6 +173,48 @@ class _AuthFormState extends State<AuthForm> {
                           final password = _password ?? '';
                           if (password != _passwordController.text) {
                             return "Senhas informadas não correspondem";
+                          }
+                          return null;
+                        },
+                ),
+              ),
+            ),
+          ),
+        if (_isSignup())
+          Card(
+            elevation: 8,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+            child: Form(
+              key: _formKeyCampus,
+              child: Container(
+                height: deviceSize.width * 0.14,
+                width: deviceSize.width * 0.90,
+                padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                child: DropdownButtonFormField(
+                  items: Campus.display.map((String items) {
+                    return DropdownMenuItem(
+                      value: items,
+                      child: Text(items),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState() {}
+                  },
+                  decoration:
+                      const InputDecoration(labelText: 'Selecione o campus'),
+                  onSaved: (String? newValue) {
+                    String campus = Campus.values.firstWhere((e) =>
+                        e.toString().toUpperCase() ==
+                        removeDiacritics(newValue!).toUpperCase());
+                    _AuthData['campus'] = campus;
+                  },
+                  validator: _isLogin()
+                      ? null
+                      : (_campus) {
+                          final campus = _campus ?? '';
+                          if (campus.toString().trim().isEmpty) {
+                            return "Campus é obrigatório";
                           }
                           return null;
                         },
@@ -190,7 +238,7 @@ class _AuthFormState extends State<AuthForm> {
             child: ElevatedButton(
               onPressed: _submit,
               child: Text(
-                _authMode == AuthMode.Login ? 'ENTRAR' : 'REGISTRAR',
+                _authMode == AuthMode.login ? 'ENTRAR' : 'REGISTRAR',
               ),
               style: ElevatedButton.styleFrom(
                 elevation: 8,

@@ -1,12 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
-import 'package:ndef/ndef.dart' as ndef;
-import 'package:mqtt_client/mqtt_client.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
-import 'package:smartlock/components/mqttservice.dart';
+import 'package:smartlock/components/MqttService.dart';
 import 'package:smartlock/models/Labs.dart';
 
 class NfcOpenPage extends StatefulWidget {
@@ -36,7 +31,7 @@ class _NfcOpenPageState extends State<NfcOpenPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                   onPressed: () async {
                     var availability = await FlutterNfcKit.nfcAvailability;
@@ -44,11 +39,11 @@ class _NfcOpenPageState extends State<NfcOpenPage> {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                          title: Text('NFC desligado'),
-                          content: Text('Ative-o em seu smartphone'),
+                          title: const Text('NFC desligado'),
+                          content: const Text('Ative-o em seu smartphone'),
                           actions: [
                             TextButton(
-                              child: Text('OK'),
+                              child: const Text('OK'),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
@@ -59,23 +54,22 @@ class _NfcOpenPageState extends State<NfcOpenPage> {
                     }
 // timeout only works on Android, while the latter two messages are only for iOS
                     var tag = await FlutterNfcKit.poll(
-                        timeout: Duration(seconds: 10),
+                        timeout: const Duration(seconds: 10),
                         iosMultipleTagMessage: "Multiple tags found!",
                         iosAlertMessage: "Scan your tag");
 
                     if (laboratorio.chaveNFC == tag.id) {
-                      print("tag correta");
-                      Provider.of<mqttservice>(context, listen: false)
-                          .connect(laboratorio.Nome);
+                      Provider.of<MqttService>(context, listen: false)
+                          .connect(laboratorio.nome);
 
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                          title: Text('Acesso Concluído'),
-                          content: Text(''),
+                          title: const Text('Acesso Concluído'),
+                          content: const Text(''),
                           actions: [
                             TextButton(
-                              child: Text('OK'),
+                              child: const Text('OK'),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
@@ -87,11 +81,11 @@ class _NfcOpenPageState extends State<NfcOpenPage> {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                          title: Text('Acesso Negado'),
-                          content: Text(''),
+                          title: const Text('Acesso Negado'),
+                          content: const Text(''),
                           actions: [
                             TextButton(
-                              child: Text('OK'),
+                              child: const Text('OK'),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
@@ -99,9 +93,7 @@ class _NfcOpenPageState extends State<NfcOpenPage> {
                           ],
                         ),
                       );
-                      print("tag errada");
                     }
-                    print(jsonEncode(tag));
 
 // write NDEF records if applicable
                     // if (tag.ndefWritable!) {
@@ -115,7 +107,7 @@ class _NfcOpenPageState extends State<NfcOpenPage> {
                     //       "00", "0001", "0002", ndef.TypeNameFormat.unknown)
                     // ]);
                   },
-                  child: Text('Abrir'),
+                  child: const Text('Abrir'),
                   style: ElevatedButton.styleFrom(
                     fixedSize: const Size(200, 200),
                     shape: const CircleBorder(),
