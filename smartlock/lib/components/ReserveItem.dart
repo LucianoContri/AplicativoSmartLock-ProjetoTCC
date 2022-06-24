@@ -83,22 +83,18 @@ class ReserveItem extends StatelessWidget {
                         ],
                       ),
                       Container(height: 5.0),
-                      Row(
-                        children: [
-                          const Text("Descrição:",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              )),
-                          Container(width: 5.0),
-                          Text(request.laboratorio.descricao,
-                              textAlign: TextAlign.start,
-                              style: const TextStyle(
-                                fontSize: 15,
-                              )),
-                        ],
-                      ),
+                      const Text("Descrição:",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          )),
+                      Container(width: 5.0),
+                      Text(request.laboratorio.descricao,
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(
+                            fontSize: 15,
+                          )),
                       Container(height: 5.0),
                       const Text("Data:",
                           textAlign: TextAlign.start,
