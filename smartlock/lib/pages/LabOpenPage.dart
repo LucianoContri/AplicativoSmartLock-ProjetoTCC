@@ -189,7 +189,8 @@ class LabOpenPage extends StatelessWidget {
                           showDialog(
                             context: context,
                             builder: (ctx) => AlertDialog(
-                              title: const Text('Laboratório indisponível'),
+                              title: const Text(
+                                  'Laboratório indisponível no momento.'),
                               content: const Text(
                                   'Somente é possível acessar o laboratório 15 minutos antes da reserva.'),
                               actions: [

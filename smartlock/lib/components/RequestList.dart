@@ -111,7 +111,9 @@ class RequestList with ChangeNotifier {
     );
     Map<String, dynamic> data = jsonDecode(response.body);
     if (type == Constants.APPROVE) {
-      data.removeWhere((key, value) => value['Usuario'] != auth.uid);
+      data.removeWhere((key, value) =>
+          value['Usuario'] != auth.uid ||
+          DateTime.now().isAfter(DateTime.parse(data[key]['Horario'])));
     }
     for (String key in data.keys) {
       Laboratorio lab = await getLab(data[key]['Laboratorio']);
@@ -121,8 +123,9 @@ class RequestList with ChangeNotifier {
           id: key,
           laboratorio: lab,
           usuario: user,
-          status:
-              type == Constants.RESERVE ? Constants.PENDING : Constants.APPROVE,
+          status: type == Constants.RESERVE
+              ? Constants.PENDING
+              : Constants.ACCEPTED,
           horario: DateTime.parse(data[key]['Horario']),
           duracao: Duration(seconds: data[key]['Duracao']),
           integrantes: [],
